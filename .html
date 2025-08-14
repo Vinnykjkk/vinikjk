@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Um pedido para Sofia</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            background-color: #000;
+        }
+        #background-video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -1;
+            object-fit: cover;
+        }
+        #soundButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: background-color 0.3s;
+        }
+        #soundButton:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .card {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.02);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: cardFadeIn 1s ease-out 0.5s forwards;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes cardFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        .heart-icon {
+            font-size: 50px;
+            text-shadow: 0 0 15px #ff4081, 0 0 30px #ff4081;
+            opacity: 0;
+            animation: elementFadeIn 1s ease-out 1s forwards, pulse 1.5s infinite ease-in-out 2s;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+        }
+        .message {
+            font-family: 'Kalam', cursive;
+            font-size: 22px;
+            line-height: 1.8;
+            color: #e0e0e0;
+            margin: 25px 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); 
+        }
+        .line {
+            display: block;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: elementFadeIn 1s ease-out forwards;
+        }
+        .declaration {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffd180;
+            text-shadow: 0 0 8px #ffd180, 0 0 16px #ff9800, 1px 1px 3px rgba(0, 0, 0, 0.8);
+            animation-delay: 1.8s;
+        }
+        .commitment {
+            animation-delay: 2.8s;
+        }
+        .question {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffcccb;
+            animation-delay: 3.8s;
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: elementFadeIn 1s ease-out 4.8s forwards;
+            white-space: nowrap; /* Impede que o texto do botão quebre a linha */
+        }
+        .button:hover {
+            transform: scale(1.05);
+        }
+
+        .button-yes {
+            color: white;
+            background: linear-gradient(45deg, #ff80ab, #e91e63);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .button-music {
+            color: #333;
+            background: linear-gradient(45deg, #fff176, #ffd180);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+
+        @keyframes elementFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <video id="background-video" autoplay loop muted playsinline>
+        <source src="https://www.dropbox.com/scl/fi/oc624d9f8dgsmh1fwmzqh/V-deo-sem-t-tulo-Feito-com-o-Clipchamp.mp4?rlkey=fl0fthe8a2feeeiksm4y2fkin&st=t9qtg6dd&dl=1" type="video/mp4">
+        Seu navegador não suporta vídeos.
+    </video>
+    <button id="soundButton">🔇</button>
+    <div class="card">
+        <div class="heart-icon">💖</div>
+        <p class="message">
+            <span class="line declaration">E a verdade é que... eu estou completamente apaixonado por você.</span>
+            <span class="line commitment">Quero dividir meus dias, meus sonhos e minha vida ao seu lado.</span>
+            <span class="line question">Sofia, aceita namorar comigo? ❤️</span>
+        </p>
+        <div class="buttons-container">
+            <a href="#" id="yesButton" class="button button-yes">Sim, eu aceito! ✨</a>
+            <a href="http://www.youtube.com/watch?v=i0kTXRXhKnI&t=17s" target="_blank" class="button button-music">Você é a única que eu quero ouvir essa música 🎵</a>
+        </div>
+    </div>
+    
+    <canvas id="confetti-canvas"></canvas>
+    
+    <script>
+        const yesButton = document.getElementById('yesButton');
+        const video = document.getElementById('background-video');
+        const soundButton = document.getElementById('soundButton');
+
+        soundButton.addEventListener('click', () => {
+            if (video.muted) {
+                video.muted = false;
+                soundButton.textContent = '🔈';
+            } else {
+                video.muted = true;
+                soundButton.textContent = '🔇';
+            }
+        });
+
+        yesButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const seuNumero = '5591981364910';
+            const mensagem = 'Sim, eu aceito! ✨';
+            const whatsappUrl = `https://wa.me/${seuNumero}?text=${encodeURIComponent(mensagem)}`;
+            
+            startConfetti();
+            
+            setTimeout(() => {
+                window.location.href = whatsappUrl;
+            }, 2500);
+        });
+
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettiParticles = [];
+
+        function startConfetti() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            let totalParticles = window.innerWidth < 600 ? 70 : 130; 
+            for (let i = 0; i < totalParticles; i++) {
+                confettiParticles.push(createParticle());
+            }
+            renderConfetti();
+        }
+
+        function createParticle() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height - canvas.height;
+            const emoji = Math.random() > 0.5 ? '💖' : '✨';
+            const size = Math.random() * 15 + 15;
+            const speedY = Math.random() * 2 + 1.5;
+            const speedX = (Math.random() - 0.5) * 2;
+            const opacity = Math.random() * 0.5 + 0.5;
+            return { x, y, emoji, size, speedY, speedX, opacity };
+        }
+        
+        let animationFrameId;
+        function renderConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            confettiParticles.forEach((p, index) => {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.opacity -= 0.004; 
+                
+                ctx.save();
+                ctx.globalAlpha = p.opacity;
+                ctx.font = `${p.size}px sans-serif`;
+                ctx.fillText(p.emoji, p.x, p.y);
+                ctx.restore();
+
+                if (p.y > canvas.height + 20 || p.opacity <= 0) {
+                    confettiParticles.splice(index, 1);
+                }
+            });
+
+            if (confettiParticles.length > 0) {
+                animationFrameId = requestAnimationFrame(renderConfetti);
+            } else {
+                cancelAnimationFrame(animationFrameId);
+            }
+        }
+    </script>
+
+</body>
+</html>
